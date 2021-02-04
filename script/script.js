@@ -2,20 +2,24 @@
 const dino = document.querySelector('.dino');
 
 //Acessando o elemento Background pelo DOM
-const background = document.querySelector('.background')
+const background = document.querySelector('.background');
+
+const bodyBG = document.querySelector('.body');
+
+const rank = document.querySelector('.rank');
+let points = 0;
 
 //Define o estado para "No chão"
 let isJumping = false;
 
 //Declarando a posição inicial do Dino
-let position = 0;
+let position = 40;
 
 //Função para lidar com o KeyUp quando pressionada a tecla de Espaço(32)
 function handleKeyUp(event){
     if (event.keyCode === 32){
         if(!isJumping)
         {
-            console.log("Pressionou espaço!")
             jump();
         }     
     }
@@ -31,7 +35,7 @@ function jump(){
     let upInterval = setInterval(() => {
 
         //Condição para alcançar a altura máxima
-        if(position >= 150){
+        if(position >= 200){
 
             //Caso alcance a altura máxima ele zera o contador de intevalo
             clearInterval(upInterval);
@@ -40,7 +44,7 @@ function jump(){
             let downInterval = setInterval(() => {
 
                 //Limitanto para não passar do chão
-                if(position <= 0){
+                if(position <= 40){
 
                     //Caso alcance o chão, zera o contador de intervalo
                     clearInterval(downInterval);
@@ -61,7 +65,7 @@ function jump(){
             dino.style.bottom = position + 'px';
         }
     //Tempo de atualização em milisegundos  
-    }, 20)
+    }, 25)
 }
 
 //Função para gerar obstaculos(cactus)
@@ -71,7 +75,7 @@ function createCactus(){
     const cactus = document.createElement('div');
 
     //Posição inicial
-    let cactusPosition = 1000;
+    let cactusPosition = 2000;
 
     //Classe para gerar um tempo randomico em milissegundos
     let randomTime = Math.random() * 6000;
@@ -80,7 +84,8 @@ function createCactus(){
     cactus.classList.add('cactus');
 
     //Com o style você tem acesso a todos os atributos CSS do objeto
-    cactus.style.left = 1000 + 'px';
+    cactus.style.left = 2000 + 'px';
+    cactus.style.bottom = 40 + 'px';
 
     //AppendChil serve para parentar objetos a outros objetos
     background.appendChild(cactus);
@@ -103,11 +108,18 @@ function createCactus(){
 
             //E remove o parent com o background
             background.removeChild(cactus);
-        
+            
+            points += 1;
+
+            rank.innerHTML = 'Pontuação: ' + points;
           
         } else if(cactusPosition > 0 && cactusPosition < 60 && position < 60){
             clearInterval(leftInterval);
-            document.body.innerHTML = '<h1 class= "game-over">Fim de Jogo</h1>';
+
+            bodyBG.style.background = "#000000";
+            document.body.innerHTML = 
+            '<center><img src="img/game-over.png" align="middle"></center> <h1 class="game-over">Aperte F5 para jogar novamente</h1>';
+
         //Caso ele ainda esteja em tela  
         } else{
 
@@ -117,7 +129,7 @@ function createCactus(){
         };
     }, 20);
 
-    //Função JS para disparar funções apos alguem tempo
+    //Função JS para disparar funções apos algum tempo
     setTimeout(createCactus, randomTime);
 }
 
