@@ -9,6 +9,8 @@ const bodyBG = document.querySelector('.body');
 const rank = document.querySelector('.rank');
 let points = 0;
 
+let jogando = 0;
+
 //Define o estado para "No chão"
 let isJumping = false;
 
@@ -115,10 +117,8 @@ function createCactus(){
           
         } else if(cactusPosition > 0 && cactusPosition < 60 && position < 60){
             clearInterval(leftInterval);
-
-            bodyBG.style.background = "#000000";
-            document.body.innerHTML = 
-            '<center><img src="img/game-over.png" align="middle"></center> <h1 class="game-over">Aperte F5 para jogar novamente</h1>';
+            jogando += 1;
+            GameOver(jogando);
 
         //Caso ele ainda esteja em tela  
         } else{
@@ -133,6 +133,26 @@ function createCactus(){
     setTimeout(createCactus, randomTime);
 }
 
-createCactus();
+function geraCactus(){
+    if(jogando === 1)
+    {
+        GameOver();
+    }
+    else{
+        createCactus();
+    }
+}
+
+function GameOver(status){ 
+    if(status === 1)
+    {
+        bodyBG.style.background = "#000000";
+        document.body.innerHTML = 
+        '<center><img src="img/game-over.png" align="middle"></center> <h1 class="game-over">Aperte F5 para jogar novamente</h1> <audio autoplay="autoplay"><source src="msc/game-over-EX.mp3" type="audio/mp3" />seu navegador não suporta HTML5</audio>';
+    }
+ 
+}
+
+geraCactus();
 //Captura o evento quando soltamos uma tecla
 document.addEventListener('keyup', handleKeyUp);
